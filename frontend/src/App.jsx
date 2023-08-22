@@ -23,7 +23,7 @@ function App() {
 
     return (
         <div className="flex flex-col h-screen">
-            <main className="flex-1 bg-gray-100 p-6 overflow-y-auto">
+            <main className="flex-1 bg-gray-50 p-6 overflow-y-auto">
                 {showDirSelection && <DirectoriesPanel {...{handleProceed}} />}
                 {!showDirSelection && <DuplicatesPanel {...{handleReset}} />}
             </main>
