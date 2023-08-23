@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {useEventSubscription, useEventSubscriptionOnce} from "./CustomEventHooks.jsx";
 import { Panel, PanelGroup } from "react-resizable-panels";
 import ResizeHandle from "./ResizeHandle.jsx"
-import { ArrowPathIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { ArrowPathIcon, XCircleIcon, DocumentDuplicateIcon } from '@heroicons/react/24/outline';
 
 export default function DuplicatesPanel({ handleReset })
 {
@@ -73,15 +73,20 @@ export default function DuplicatesPanel({ handleReset })
                 <p className="text-2xl font-bold text-gray-800 flex-1">Items with duplicates</p>
                 <span className="text-2xl font-bold text-gray-600 flex-0">{foundFilesCount}</span>
             </div>
-            <PanelGroup autoSaveId="conditional" direction="horizontal" classNAme="flex">
+            <PanelGroup autoSaveId="conditional" direction="horizontal" className="flex">
                 <Panel id="main" order={1}>
                     <div className="p-6 rounded-lg bg-neutral-50 overflow-auto text-xs flex flex-col flex-1">
+                        <ul className="list-none p-0 m-0 divide-y divide-purple-200 mt-3">
                         {Object.entries(foundFiles).map(([hash, files]) => (
-                            <div key={hash} className="flex flex-row items-center">
-                                <p className="text-gray-600 flex-1">{files[0].path}</p>
-                                <button className="text-gray-600 flex-0" onClick={() => handleShowHashMatches(hash)}>details</button>
-                            </div>
+                            <li key={hash} onClick={() => handleShowHashMatches(hash)} className="p-2 hover:bg-purple-100 hover:cursor-pointer flex justify-between">
+                                <span className="break-all">{files[0].path}</span>
+                                <div className="flex ml-2">
+                                    <DocumentDuplicateIcon className="w-4 h-4 flex-1" />
+                                    <p className="flex-1">{files.length}</p>
+                                </div>
+                            </li>
                         ))}
+                        </ul>
                     </div>
                 </Panel>
                 {showHashMatches !== '' && (
@@ -92,7 +97,7 @@ export default function DuplicatesPanel({ handleReset })
                                 <XCircleIcon className="w-5 h-5 text-slate-400 hover:text-purple-600 self-end hover:cursor-pointer relative left-4 bottom-3" onClick={handleCloseDetails} />
                                 {foundFiles.hasOwnProperty(showHashMatches) && foundFiles[showHashMatches].map((file, index) => (
                                     <div key={index} className="flex flex-row items-center">
-                                        <p className="text-sm text-gray-600 flex-1">{file.path}</p>
+                                        <p className="text-sm text-gray-600 break-all">{file.path}</p>
                                     </div>
                                 ))}
                             </div>
