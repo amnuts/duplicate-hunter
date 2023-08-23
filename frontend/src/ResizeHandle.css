@@ -1,0 +1,50 @@
+.ResizeHandleOuter {
+    flex: 0 0 .5rem;
+    display: flex;
+    justify-content: stretch;
+    align-items: stretch;
+    padding: 0;
+    outline: none;
+    --background-color: transparent;
+}
+.ResizeHandleOuter[data-resize-handle-active],
+.ResizeHandleInner[data-collapsed] {
+    --background-color: rgb(233 213 255);
+}
+
+@media (max-width: 500px) {
+    .ResizeHandleOuter {
+        flex: 0 0 2.5rem;
+    }
+}
+
+.ResizeHandleInner {
+    flex: 1;
+    border-radius: 0.5rem;
+    background-color: var(--background-color);
+    transition: background-color 0.2s linear;
+    position: relative;
+}
+
+.HorizontalIcon,
+.VerticalIcon {
+    color: black;
+    position: absolute;
+    left: calc(50% - 0.5rem);
+    top: calc(50% - 0.5rem);
+    width: 1rem;
+    height: 1rem;
+}
+
+.ResizeHandleOuter[data-panel-group-direction="horizontal"] .HorizontalIcon,
+.ResizeHandleOuter[data-panel-group-direction="vertical"] .VerticalIcon {
+    display: block;
+}
+.ResizeHandleOuter[data-panel-group-direction="vertical"] .HorizontalIcon,
+.ResizeHandleOuter[data-panel-group-direction="horizontal"] .VerticalIcon {
+    display: none;
+}
+.ResizeHandleOuter[data-resize-handle-active] .HorizontalIcon,
+.ResizeHandleOuter[data-resize-handle-active] .VerticalIcon {
+    display: none;
+}

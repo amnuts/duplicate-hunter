@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {RemoveStartDirectory, SelectStartDirectories} from "../wailsjs/go/main/App.js";
-import { FolderPlusIcon, MagnifyingGlassIcon, FolderMinusIcon } from '@heroicons/react/24/outline'
+import { FolderPlusIcon, MagnifyingGlassIcon, FolderMinusIcon } from '@heroicons/react/24/outline';
 
 export default function DirectoriesPanel({ handleProceed })
 {
@@ -45,7 +45,7 @@ export default function DirectoriesPanel({ handleProceed })
     }
 
     return (
-        <>
+        <div className="rounded-lg bg-neutral-50 p-6 m-6">
             <div className="mr-4">
                 <h2 className="font-bold text-slate-800">Add a start directory</h2>
                 <p className="text-sm text-slate-600 mb-3">You can add one or more directories where you want top look for duplicate files.  The search will be recursive, so the list will only show the top-most path if you select a path lower down in the same folder.</p>
@@ -55,6 +55,6 @@ export default function DirectoriesPanel({ handleProceed })
                 Add start directory
             </button>
             {generateStartDirectoryList()}
-        </>
+        </div>
     );
 }
