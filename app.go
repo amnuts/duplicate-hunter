@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/amnuts/duplicate-hunter/utils"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"os"
 	"os/exec"
@@ -42,7 +43,7 @@ func (a *App) SelectStartDirectories() []string {
 		return []string{}
 	}
 	if selection != "" {
-		a.startDirectories = AppendPath(a.startDirectories, selection)
+		a.startDirectories = utils.AppendPath(a.startDirectories, selection)
 		sort.Strings(a.startDirectories)
 	}
 	fmt.Println("Directories:", a.startDirectories)
@@ -68,13 +69,13 @@ func (a *App) ClearStartDirectories() []string {
 // been chosen as a starting point, and finds any files that have duplicates
 // based on the sha256 hash of the file contents
 func (a *App) FindDuplicates() {
-	var files []FileData
+	var files []utils.FileData
 	var wg sync.WaitGroup
-	fileChan := make(chan FileData)
+	fileChan := make(chan utils.FileData)
 
 	for _, dir := range a.startDirectories {
 		wg.Add(1)
-		go processFiles(dir, &wg, fileChan)
+		go utils.ProcessFiles(dir, &wg, fileChan)
 	}
 
 	go func() {
@@ -89,14 +90,14 @@ func (a *App) FindDuplicates() {
 		case file, ok := <-fileChan:
 			if !ok {
 				fmt.Println("\nScanning completed. Finding duplicates...")
-				hashToFileMap := processFound(files)
+				hashToFileMap := utils.ProcessFound(files)
 				runtime.EventsEmit(a.ctx, "finding-complete", hashToFileMap)
 				return
 			}
 			files = append(files, file)
 			processedFiles++
 			fmt.Println("Processed", processedFiles, "files - latest file:", file.Path)
-			runtime.EventsEmit(a.ctx, "finding-duplicates", CurrentlyFound{File: file, CurrentCount: processedFiles})
+			runtime.EventsEmit(a.ctx, "finding-duplicates", utils.CurrentlyFound{File: file, CurrentCount: processedFiles})
 		}
 	}
 }

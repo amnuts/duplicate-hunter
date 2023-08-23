@@ -2,6 +2,8 @@ package main
 
 import (
 	"embed"
+	"github.com/amnuts/duplicate-hunter/cli"
+	"os"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -12,6 +14,18 @@ import (
 var assets embed.FS
 
 func main() {
+	if len(os.Args) > 1 {
+		startCLI()
+	} else {
+		startGUI()
+	}
+}
+
+func startCLI() {
+	cli.Execute()
+}
+
+func startGUI() {
 	// Create an instance of the app structure
 	app := NewApp()
 

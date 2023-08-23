@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"crypto/sha256"
@@ -69,8 +69,8 @@ func hashFile(filePath string) (string, error) {
 	return fmt.Sprintf("%x\n", hash.Sum(nil)), nil
 }
 
-// processFiles walks the directory tree starting at dir and sends the file
-func processFiles(dir string, wg *sync.WaitGroup, fileChan chan<- FileData) {
+// ProcessFiles walks the directory tree starting at dir and sends the file
+func ProcessFiles(dir string, wg *sync.WaitGroup, fileChan chan<- FileData) {
 	defer wg.Done()
 	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -99,8 +99,8 @@ func processFiles(dir string, wg *sync.WaitGroup, fileChan chan<- FileData) {
 	}
 }
 
-// processFound sorts the files into duplicates and returns a map of the duplicates
-func processFound(files []FileData) map[string][]FileData {
+// ProcessFound sorts the files into duplicates and returns a map of the duplicates
+func ProcessFound(files []FileData) map[string][]FileData {
 	// sort them into duplicates
 	hashToFileMap := make(map[string][]FileData)
 	for _, file := range files {
