@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {useEventSubscription, useEventSubscriptionOnce} from "./CustomEventHooks.jsx";
 import { Panel, PanelGroup } from "react-resizable-panels";
 import ResizeHandle from "./ResizeHandle.jsx"
-import { ArrowPathIcon } from '@heroicons/react/24/outline';
+import { ArrowPathIcon, XCircleIcon } from '@heroicons/react/24/outline';
 
 export default function DuplicatesPanel({ handleReset })
 {
@@ -46,11 +46,11 @@ export default function DuplicatesPanel({ handleReset })
 
     if (isSearching) {
         return (
-            <div className="flex flex-col items-center text-sm m-6 p-6">
+            <div className="flex flex-col flex-1 items-center text-sm m-6 p-6 justify-center">
                 <div className="loader"></div>
-                <div className="modal-text p-6">searching for duplicate files</div>
-                {isProcessing.hasOwnProperty('file') && (<div className="modal-text p-6">{isProcessing.file.path}</div>) || null}
-                {isProcessing.hasOwnProperty('count') && (<div className="modal-text p-6">{isProcessing.count} processed</div>) || null}
+                <div className="modal-text mt-4">searching for duplicate files</div>
+                {isProcessing.hasOwnProperty('file') && (<div className="modal-text text-xs py-4">{isProcessing.file.path}</div>) || null}
+                {isProcessing.hasOwnProperty('count') && (<div className="modal-text">{isProcessing.count} processed</div>) || null}
             </div>
         )
     }
@@ -73,29 +73,29 @@ export default function DuplicatesPanel({ handleReset })
                 <p className="text-2xl font-bold text-gray-800 flex-1">Items with duplicates</p>
                 <span className="text-2xl font-bold text-gray-600 flex-0">{foundFilesCount}</span>
             </div>
-            <PanelGroup autoSaveId="conditional" direction="horizontal" className="text-xs flex">
-                <Panel id="center" order={1} className="rounded-lg bg-neutral-50 p-6">
-                    <div className="flex flex-col">
-                        <div className="flex flex-col overflow-auto">
-                            {Object.entries(foundFiles).map(([hash, files]) => (
-                                <div key={hash} className="flex flex-row items-center">
-                                    <p className="text-gray-600 flex-1">{files[0].path}</p>
-                                    <button className="text-gray-600 flex-0" onClick={() => handleShowHashMatches(hash)}>details</button>
-                                </div>
-                            ))}
-                        </div>
+            <PanelGroup autoSaveId="conditional" direction="horizontal" classNAme="flex">
+                <Panel id="main" order={1}>
+                    <div className="p-6 rounded-lg bg-neutral-50 overflow-auto text-xs flex flex-col flex-1">
+                        {Object.entries(foundFiles).map(([hash, files]) => (
+                            <div key={hash} className="flex flex-row items-center">
+                                <p className="text-gray-600 flex-1">{files[0].path}</p>
+                                <button className="text-gray-600 flex-0" onClick={() => handleShowHashMatches(hash)}>details</button>
+                            </div>
+                        ))}
                     </div>
                 </Panel>
                 {showHashMatches !== '' && (
                     <>
                         <ResizeHandle className="mx-1" />
-                        <Panel id="right" order={2} className="rounded-lg bg-neutral-50 p-6">
-                            <button onClick={handleCloseDetails}>X</button>
-                            {foundFiles.hasOwnProperty(showHashMatches) && foundFiles[showHashMatches].map((file, index) => (
-                                <div key={index} className="flex flex-row items-center">
-                                    <p className="text-sm text-gray-600 flex-1">{file.path}</p>
-                                </div>
-                            ))}
+                        <Panel id="meta" order={2} className="flex">
+                            <div className="p-6 rounded-lg bg-neutral-50 overflow-auto text-xs flex flex-col flex-1">
+                                <XCircleIcon className="w-5 h-5 text-slate-400 hover:text-purple-600 self-end hover:cursor-pointer relative left-4 bottom-3" onClick={handleCloseDetails} />
+                                {foundFiles.hasOwnProperty(showHashMatches) && foundFiles[showHashMatches].map((file, index) => (
+                                    <div key={index} className="flex flex-row items-center">
+                                        <p className="text-sm text-gray-600 flex-1">{file.path}</p>
+                                    </div>
+                                ))}
+                            </div>
                         </Panel>
                     </>
                 )}
